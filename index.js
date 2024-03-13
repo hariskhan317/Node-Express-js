@@ -1,89 +1,77 @@
 const express = require('express');
+const app = express();
 const Joi = require('joi');
-const { error } = require('joi/lib/types/lazy');
-
-const courses = [
-    { id: 1, name: 'course1' },
-    { id: 2, name: 'course2' },
-    { id: 3, name: 'course3 ' },
-]
-const app = express()
 app.use(express.json());
 
+const genres = [
+    { id: 1, name: 'Horror' },
+    { id: 2, name: 'Action' }
+];
+
 app.get('/', (req, res) => {
-    res.send('hello world')
+    res.send(genres);
 })
 
-app.get('/api/courses', (req, res) => {
-    res.send(courses)
+app.get('/genres', (req, res) => {
+    res.send(genres);
 })
 
-app.get(`/api/courses/:id`, (req, res) => {
-    // we are using parseInt because whenever we will use this "req.params.id" it will 
-    // return us string so convert that we need to convert it into int
-    const course = courses.find(c => c.id === parseInt(req.params.id))
-    if (!course) {
-        return res.status(404).send("This Course is not fouind")
+app.get('/genres/:id', (req, res) => {
+    const genre = genres.find(g => g.id === parseInt(req.params.id))
+    if (!genre) {
+        return res.status(404).send('GENRE NOT FOUND')
     } else {
-        res.send(course)
+        return res.send(genre);   
     }
-
 })
 
-app.post('/api/courses', (req, res) => {
-
+app.post('/genres', (req, res) => {
     const { error } = validateSchema(req.body);
-    if (error) {
-        return res.status(400).send(error.details[0].message);
+    if (error){
+        return res.status(400).send(error.details[0].message)
     }
-
-    const course = {
-        id: courses.length + 1,
+    const genre = {
+        id: genres.length + 1,
         name: req.body.name,
     }
-    courses.push(course);
-    res.send(course);
+    genres.push(genre)
+    res.send(genre)
 })
 
-app.put('/api/courses/:id', (req, res) => {
-    //using find method to find the actual course to update and saving it inside the couse constant
-    const course = courses.find(c => c.id === parseInt(req.params.id))
-    // TO check if that course is presant ?
-    if (!course) {
-        return res.status(400).send('no Course found')
+app.put('/genres/:id', (req, res) => {
+    const genre = genres.find(g => g.id === parseInt(req.params.id));
+    if (!genre) {
+       return res.status(404).send("Genere Not Found")
     }
-    // validating the course
     const { error } = validateSchema(req.body);
     if (error) {
-        return res.status(400).send(error.details[0].message);
+        return res.status(400).send(error.details.message);
     }
-    // using that const to update the name
-    course.name = req.body.name;
-    res.send(course);
+    genre.name = req.body.name;
+    res.send(genre);
 })
 
-app.delete('/api/courses/:id', (req, res) => {
-    const course = courses.find(c => c.id === parseInt(req.params.id))
-    if (!course) {
-        return res.status(404).send('Course not Found')
+app.delete('/genres/:id', (req, res) => {
+    const genre = genres.find(g => g.id === parseInt(req.params.id))
+    if (!genre) {
+        res.status(400).send("Not Found Cant Delete")
     }
-    // Checking the courses array if id matches it will exculdes those items and save in updateCourse.
-    const index = courses.indexOf(course);
-    courses.splice(index, 1);
+    const index = genres.indexOf(genre);
+    genres.splice(index, 1);
 
-    res.send(course);
+    res.send(genre);
 })
 
 
 const port = process.env.PORT || 5000;
-
 app.listen(port, () => {
-    console.log(`Listening on port ${port}`)
-})
+    console.log(`Listening to ${port}`)
+});
 
-function validateSchema(validate) {
+function validateSchema(genre) {
     const schema = {
         name: Joi.string().min(3).max(10).required()
     }
-    return Joi.validate(validate, schema);
+    return Joi.validate(genre, schema);
+
 }
