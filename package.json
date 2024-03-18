@@ -4,14 +4,22 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hariskhan317/Node-Express-js.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hariskhan317/Node-Express-js/issues"
+  },
+  "homepage": "https://github.com/hariskhan317/Node-Express-js#readme",
   "dependencies": {
     "express": "^4.18.3",
+    "mongoose": "^8.2.2",
     "nodemon": "^3.1.0"
   }
 }
