@@ -3,10 +3,7 @@ const router = express.Router();
 const Joi = require('joi');
 const mongoose = require('mongoose')
 
-// const genres = [
-//     { id: 1, name: 'Horror' },
-//     { id: 2, name: 'Action' }
-// ];
+
 
 const genreSchema = new mongoose.Schema({
     name: { type: String, required: true },
@@ -14,35 +11,13 @@ const genreSchema = new mongoose.Schema({
 
 const Genres = mongoose.model('Genres', genreSchema)
 
-// async function createGenre() {
-//     const genre = new Genres({
-//         name: 'Romance',
-//     })
-//     try {
-//         const result = await genre.save();
-//         console.log(result);
-//     } catch (err) {
-//         console.log(err)
-//     }
-// }
-
-
-// async function getGenres() {
-//     try {
-//         const genre = await Genres.find();
-//         console.log(genre);
-//     } catch (err) {
-//         console.log(err)
-//     }
-// }
-
 router.get('/', async (req, res) => {
     const genres = await Genres.find();
     res.send(genres);
 })
 
 router.post('/', async (req, res) => {
-    const { error } = validateSchema(req.body);
+    const { error } = validateSchema(req.bod y);
     if (error) {
         return res.status(400).send(error.details[0].message)
     }
@@ -94,7 +69,3 @@ function validateSchema(genre) {
 }
 
 module.exports = router;
-
-
-// mongoimport --db genresDb --collection genres --file genre.json --jsonArray
-// mongoimport --db mongo-exercise --collection courses --file exercise-data.json --jsonArray
