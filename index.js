@@ -1,6 +1,11 @@
 const express = require('express');
 const app = express();
 const genres = require('./routes/genres')
+const mongoose = require('mongoose')
+
+mongoose.connect('mongodb://localhost/genresDb')
+    .then(() => console.Consolelog('Connection SuccessFull'))
+    .catch((err) => console.log(err))
 
 app.use(express.json());
 
@@ -12,8 +17,6 @@ app.get('/', (req, res) => {
 })
 
 app.use('/genres', genres)
-
-
 
 
 
